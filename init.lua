@@ -612,7 +612,9 @@ require('lazy').setup({
       --  - settings (table): Override the default settings passed when initializing the server.
       --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
       local servers = {
-        -- clangd = {},
+        clangd = {},
+        arduino_language_server = {},
+        intelephense = {},
         -- gopls = {},
         -- pyright = {},
         -- rust_analyzer = {},
@@ -641,6 +643,29 @@ require('lazy').setup({
         },
       }
 
+      -- Ensure that you have nvim-lspconfig installed
+      --
+
+      require('lspconfig').intelephense.setup {}
+      require('lspconfig').clangd.setup {
+
+        cmd = { 'clangd', '--compile-commands-dir=build' }, -- Adjust if necessary
+        root_dir = require('lspconfig').util.root_pattern('compile_commands.json', 'build.gradle'),
+      }
+
+      require('lspconfig').arduino_language_server.setup {
+        cmd = {
+          'arduino-language-server',
+          '-clangd',
+          '/usr/bin/clangd', -- Path to clangd on Linux, adjust if necessary
+          '-cli',
+          '/usr/local/bin/arduino-cli', -- Typical path for arduino-cli, adjust if necessary
+          '-cli-config',
+          '/home/tom/.arduino15/arduino-cli.yaml', -- Path to arduino-cli config file
+          '-fqbn',
+          'esp32:esp32:esp32', -- Correct FQBN for ESP32 on Linux
+        },
+      }
       -- Ensure the servers and tools above are installed
       --  To check the current status of installed tools and/or manually install
       --  other tools, you can run
@@ -654,6 +679,8 @@ require('lazy').setup({
       local ensure_installed = vim.tbl_keys(servers or {})
       vim.list_extend(ensure_installed, {
         'stylua', -- Used to format Lua code
+        'clangd',
+        'arduino_language_server',
       })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
