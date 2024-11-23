@@ -256,6 +256,12 @@ require('lazy').setup({
     },
   },
 
+  {
+    'ellisonleao/gruvbox.nvim',
+    priority = 1000,
+    config = true,
+  },
+
   -- NOTE: Plugins can also be configured to run Lua code when they are loaded.
   --
   -- This is often very useful to both group configuration, as well as handle
@@ -442,6 +448,11 @@ require('lazy').setup({
 
       vim.keymap.set('n', '<leader>tt', ':Neotree toggle<CR>', { desc = 'Toggle Neo tree' })
     end,
+  },
+
+  {
+    'christoomey/vim-tmux-navigator',
+    lazy = false,
   },
 
   -- LSP Plugins
@@ -649,7 +660,7 @@ require('lazy').setup({
       require('lspconfig').intelephense.setup {}
       require('lspconfig').clangd.setup {
 
-        cmd = { 'clangd', '--compile-commands-dir=build' }, -- Adjust if necessary
+        cmd = { 'clangd', '--compile-commands-dir=build', '-Wno-unused-include-directive' }, -- Adjust if necessary
         root_dir = require('lspconfig').util.root_pattern('compile_commands.json', 'build.gradle'),
       }
 
@@ -869,7 +880,7 @@ require('lazy').setup({
       -- Load the colorscheme here.
       -- Like many other themes, this one has different styles, and you could load
       -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
-      vim.cmd.colorscheme 'kanagawa'
+      vim.cmd.colorscheme 'gruvbox'
 
       -- You can configure highlights by doing something like:
       vim.cmd.hi 'Comment gui=none'
